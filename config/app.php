@@ -52,20 +52,9 @@ return [
     |
     */
 
-    'locale' => 'en',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Application Fallback Locale
-    |--------------------------------------------------------------------------
-    |
-    | The fallback locale determines the locale to use when the current one
-    | is not available. You may change the value to correspond to any of
-    | the language folders that are provided through your application.
-    |
-    */
-
-    'fallback_locale' => 'en',
+    'locale' => 'ru',
+    'locales' => ['en', 'ru', 'uk'],
+    'fallback_locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +67,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'SomeRandomString'),
+    'key' => env('APP_KEY', 'PjNmHsGqIYNxMsKpIiKjNmLPqnbxsdwY'),
 
     'cipher' => 'AES-256-CBC',
 
@@ -144,7 +133,9 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+	
+	#Модульная структура
+	'Pingpong\Modules\ModulesServiceProvider',
     ],
 
     /*
@@ -193,7 +184,7 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-
+	'Module' => 'Pingpong\Modules\Facades\Module',
     ],
 
 ];
