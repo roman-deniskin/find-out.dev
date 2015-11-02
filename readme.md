@@ -1,6 +1,6 @@
 # Find Out
 
-**[Find Out](http://find-out.org)** -- первая в мире анонимная социальная сеть.
+**[Find Out](http://find-out.org)** - первая в мире анонимная социальная сеть.
 
 ![find-out-blog](http://i.imgur.com/7L11ki0.jpg)
 
