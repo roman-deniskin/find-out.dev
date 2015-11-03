@@ -31,14 +31,31 @@
             }
 
             .title {
-                font-size: 96px;
+                font-size: 48px;
             }
+
+            .title a{
+                color: black;
+                font-size: 32px;
+            }
+
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Laravel 5</div>
+                <div class="title">Laravel 5</div><br>
+
+                @if(\Illuminate\Support\Facades\Auth::check() == false)
+                    <div class="title"><a href="/login">Login</a></div>
+                    <div class="title"><a href="/registration">Registration</a></div>
+
+                @else
+                    <div class="title"><a href="/logout">Logout</a></div>
+                @endif
+
+
+
             </div>
         </div>
     </body>
