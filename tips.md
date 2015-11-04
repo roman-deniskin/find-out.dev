@@ -14,6 +14,8 @@
 
 * `php artisan vendor:publish`
 
+* `php artisan key:generate`
+
 #### Настройка
 
 * Указать в настройках сервера директорию проекта public
