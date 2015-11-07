@@ -193,7 +193,7 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-	'Module' => 'Pingpong\Modules\Facades\Module',
+	    'Module' => 'Pingpong\Modules\Facades\Module',
     ],
 
 ];

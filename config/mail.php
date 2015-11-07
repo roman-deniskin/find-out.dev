@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'mail'),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'support@find-out.org', 'name' => 'Find Out'],
 
     /*
     |--------------------------------------------------------------------------
@@ -119,6 +119,6 @@ return [
     |
     */
 
-    'pretend' => false,
+    'pretend' => true,
 
 ];
