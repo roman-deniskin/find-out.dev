@@ -5,6 +5,7 @@ use Modules\User\Entities\UsersActivation;
 use Pingpong\Modules\Module;
 use Pingpong\Modules\Routing\Controller;
 use Modules\User\Entities\User;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Validator;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 #use Modules\User\Auth\AuthenticatesAndRegistersUsers;
@@ -30,7 +31,8 @@ class UserController extends Controller {
 
 	use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
-	private $redirectTo = '/';
+    protected  $redirectTo = '/';
+    protected  $redirectPath = '/';
 
 	/**
 	 * Create a new authentication controller instance.
@@ -39,13 +41,87 @@ class UserController extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->middleware('guest', ['except' => 'getLogout']);
+		$this->middleware('guest', ['except' => ['getLogout', 'update', 'profile', 'postUpdate']]);
 	}
 
 	public function getRegistration()
 	{
 		return view('user::register');
 	}
+
+    public function profile(Request $request){
+        $account = User::find($request->id)->first();
+
+        if($account){
+            return view('user::profile', [
+                'account' => $account,
+            ]);
+        }else{
+            //TODO Сделать красивый вывод ошибки
+            throw new NotFoundHttpException('User with this token not found');
+        }
+
+    }
+
+    public function postUpdate(Request $request){
+        $account = Auth::user();
+
+        if($account){
+
+            $validator = $this->updateValidator($request->all());
+
+            if ($validator->fails()) {
+                $this->throwValidationException(
+                    $request, $validator
+                );
+            }
+
+            $this->save($request->all());
+
+            return redirect(url('/user/profile/edit'))->with('message', trans('messages.DATA_SAVED'));
+
+        }else{
+            //TODO Сделать красивый вывод ошибки
+            throw new NotFoundHttpException('User with this token not found');
+        }
+    }
+
+    protected function save(array $data){
+        $user = Auth::user();
+        $user->name = $data['name'];
+        $user->surname = $data['surname'];
+        $user->gender = $data['gender'];
+        return $user->save();
+    }
+
+    public function update(Request $request){
+        $account = Auth::user();
+
+        if($account){
+            return view('user::edit', [
+                'account' => $account,
+            ]);
+        }else{
+            //TODO Сделать красивый вывод ошибки
+            throw new NotFoundHttpException('User with this token not found');
+        }
+    }
+
+    public function activation(Request $request){
+
+
+        $account = UsersActivation::where('token', $request->token)->first();
+
+        if($account){
+            return view('user::step2', [
+                'email' => $account->email,
+            ]);
+        }else{
+            //TODO Сделать красивый вывод ошибки
+            throw new NotFoundHttpException('User with this token not found');
+        }
+
+    }
 
 	/**
 	 * Handle a registration request for the application.
@@ -65,7 +141,7 @@ class UserController extends Controller {
 
 		$this->createAccount($request->all());
 
-		return redirect(url('/'))->with('message', trans('user.DISABLED_ACCOUNT_CREATED'));
+        return redirect(url('/'))->with('message', trans('messages.DISABLED_ACCOUNT_CREATED'));
 	}
 
 	/**
@@ -78,7 +154,12 @@ class UserController extends Controller {
 	{
 		$data['token'] = str_random(32);
 		$data['created_at'] = time();
-		//TODO отправка емеила
+        $url = url('/').'/user/activation/'.$data['token'];
+
+        Mail::send('user::mails/welcome', ['url' => $url], function($message) use ($data)
+        {
+            $message->to($data['email'])->subject(trans('messages.ACCOUNT_CONFIRMATION'));
+        });
 
 		return UsersActivation::create($data);
 	}
@@ -89,9 +170,9 @@ class UserController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function postRegistration1(Request $request)
+	public function postSave(Request $request)
 	{
-		$validator = $this->validator($request->all());
+		$validator = $this->valid($request->all());
 
 		if ($validator->fails()) {
 			$this->throwValidationException(
@@ -100,6 +181,9 @@ class UserController extends Controller {
 		}
 
 		Auth::login($this->create($request->all()));
+
+        $account = UsersActivation::where('email', $request->email)->first();
+        $account->delete();
 
 		return redirect($this->redirectPath());
 	}
@@ -119,6 +203,37 @@ class UserController extends Controller {
 		]);
 	}
 
+    /**
+     * Get a validator for an incoming editing account request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function valid(array $data)
+    {
+        return Validator::make($data, [
+            'email' => 'required|email|max:255|unique:users',
+            'name' => 'max:255',
+            'surname' => 'max:255',
+            'gender' => 'in:0,1',
+            'login' => 'required|max:255|unique:users',
+            'password' => 'required|min:6',
+        ]);
+    }
+
+
+    protected function updateValidator(array $data)
+    {
+        return Validator::make($data, [
+            #'email' => 'email|max:255',
+            'name' => 'max:255',
+            'surname' => 'max:255',
+            'gender' => 'in:0,1',
+            #'login' => 'max:255',
+            #'password' => 'required|min:6',
+        ]);
+    }
+
 	/**
 	 * Create a new user instance after a valid registration.
 	 *
@@ -129,6 +244,8 @@ class UserController extends Controller {
 	{
 		return User::create([
 			'login' => $data['login'],
+			'name' => $data['name'],
+			'surname' => $data['surname'],
 			'email' => $data['email'],
 			'password' => bcrypt($data['password']),
 		]);

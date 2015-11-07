@@ -1,5 +1,5 @@
-@extends('user::layouts.master')
-
-@section('content')
-	<h1>Hello World!</h1>
-@stop
+{{ trans('user.WELCOME_EMAIL') }}
+<br>
+{{ trans('user.FOR_CONFIRM_GO_TO') }}
+<br>
+{!! $url !!}

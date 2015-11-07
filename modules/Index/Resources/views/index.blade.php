@@ -6,7 +6,7 @@
         {{ Session::get('message') }}
     @endif
 
-    @if(\Illuminate\Support\Facades\Auth::check() == false)
+    @if(Auth::check() == false)
         <h1>Login</h1>
 
         @if (count($errors) > 0)
@@ -60,6 +60,8 @@
         <div class="title"><a href="/login">Login</a></div>
         <div class="title"><a href="/registration">Registration</a></div>
     @else
+        <a href="{{ url('/user/profile/'.Auth::user()->id) }}">View Profile</a>
+        <a href="{{ url('/user/profile/edit') }}">Edit Profile</a>
         <div class="title"><a href="/logout">Logout</a></div>
     @endif
 
