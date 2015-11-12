@@ -81,8 +81,7 @@ class UserController extends Controller {
             return redirect(url('/user/profile/edit'))->with('message', trans('messages.DATA_SAVED'));
 
         }else{
-            //TODO Сделать красивый вывод ошибки
-            throw new NotFoundHttpException('User with this token not found');
+			return redirect(url('/'))->with('message', trans('user::messages.tokenNotFound'));
         }
     }
 
@@ -102,8 +101,7 @@ class UserController extends Controller {
                 'account' => $account,
             ]);
         }else{
-            //TODO Сделать красивый вывод ошибки
-            throw new NotFoundHttpException('User with this token not found');
+            return redirect(url('/'))->with('message', trans('user::messages.tokenNotFound'));
         }
     }
 
@@ -117,8 +115,7 @@ class UserController extends Controller {
                 'email' => $account->email,
             ]);
         }else{
-            //TODO Сделать красивый вывод ошибки
-            throw new NotFoundHttpException('User with this token not found');
+			abort(404, trans('user::messages.tokenNotFound'));
         }
 
     }
@@ -213,10 +210,10 @@ class UserController extends Controller {
     {
         return Validator::make($data, [
             'email' => 'required|email|max:255|unique:users',
-            'name' => 'max:255',
-            'surname' => 'max:255',
+            'name' => 'max:255|min:1',
+            'surname' => 'max:255|min:1',
             'gender' => 'in:0,1',
-            'login' => 'required|max:255|unique:users',
+            'login' => 'required|max:255|min:2|unique:users',
             'password' => 'required|min:6|max:100',
         ]);
     }
@@ -342,7 +339,7 @@ class UserController extends Controller {
 	{
 		return Lang::has('auth.failed')
 			? Lang::get('auth.failed')
-			: 'These credentials do not match our records.';
+			: 'auth.failed';
 	}
 
 	/**

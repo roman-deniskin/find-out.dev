@@ -2,53 +2,69 @@
 
 @section('content')
 
+    <style>
+        .red{
+            color: red;
+        }
+    </style>
+
     <h1>Hello World</h1>
 
-    <p>
-        {{ $email }}
-    </p>
-
-    @if (count($errors) > 0)
+    @if ($errors->has())
         <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+            {{ trans('user::messages.ERROR_IN_REG2') }}
+
+            @foreach($errors->get('login') as $arr)
+                <li>{{ trans('user::messages.'.$arr, [
+                'att' => trans('user::names.login'),
+                ]) }}</li>
+            @endforeach
+
+            @foreach($errors->get('password') as $arr)
+                <li>{{ trans('user::messages.'.$arr, [
+                'att' => trans('user::names.password'),
+                ]) }}</li>
+            @endforeach
+
         </div>
     @endif
 
     <p>
-        {{ trans('messages.PLZ_FILL_ALL_FIELDS') }}
+        {{ trans('user::messages.PLZ_FILL_ALL_FIELDS') }}
     </p>
 
     <form role="form" method="post" action="{{ url('user/save') }}">
         {!! csrf_field() !!}
 
-        <input type="hidden" class="form-control" id="email" placeholder="Email" name="email" value="{{ $email }}">
+        <label for="email">E-mail</label>
+        <input type="hidden" class="form-control" name="email" value="{{ $email }}">
+        <input type="text" class="form-control" id="email" placeholder="Email" name="email" value="{{ $email }}" disabled><br>
 
-        <label for="email">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Name" name="name"><br>
+        <label for="name">{{ trans('user::names.name') }}</label>
+        <input type="text" class="form-control" id="name" placeholder="{{ trans('user::names.name') }}" name="name" value="{{ old('name') }}"><br>
 
-        <label for="email">Surname</label>
-        <input type="text" class="form-control" id="name" placeholder="Surname" name="surname"><br>
+        <label for="surname">{{ trans('user::names.surname') }}</label>
+        <input type="text" class="form-control" id="name" placeholder="{{ trans('user::names.surname') }}" name="surname" value="{{ old('surname') }}"><br>
 
-        <label for="gender">Gender</label>
+        <label for="gender">{{ trans('user::names.gender') }}</label>
         <select name="gender" id="gender">
-            <option value="1">Men</option>
-            <option value="0">Women</option>
+            <option value="1">{{ trans('user::names.gender.men') }}</option>
+            <option value="0">{{ trans('user::names.gender.women') }}</option>
         </select>
 
         <br>
 
-        <label for="login">Login</label>
-        <input type="text" class="form-control" id="login" placeholder="Login" name="login"><br>
+        <label @if($errors->has('login')) class="red" @endif for="login">{{ trans('user::names.login') }}</label>
+        <input type="text" class="form-control" id="login" placeholder="{{ trans('user::names.login') }}" name="login" value="{{ old('login') }}"><br>
 
-        <label for="password">Pass</label>
-        <input type="password" class="form-control" id="password" placeholder="Password" name="password"><br>
+        <label @if($errors->has('password')) class="red" @endif for="password">{{ trans('user::names.password') }}</label>
 
-        <button type="submit" class="btn btn-default">Отправить</button>
+
+
+        <input type="password" class="form-control"
+               id="password" placeholder="{{ trans('user::names.password') }}" name="password"><br>
+
+        <button type="submit" class="btn btn-default">{{ trans('user::names.register') }}</button>
     </form>
 
 @stop

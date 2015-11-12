@@ -55,13 +55,9 @@
 
         </form>
 
-        <hr>
-
-        <div class="title"><a href="/login">{{ trans('user::names.authorization') }}</a></div>
-        <div class="title"><a href="/registration">{{ trans('user::names.registration') }}</a></div>
     @else
-        <a href="{{ url('/user/profile/'.Auth::user()->id) }}">{{ trans('user::names.view-profile') }}</a>
-        <a href="{{ url('/user/profile/edit') }}">{{ trans('user::names.edit-profile') }}</a>
+        <a href="{{ url('/user/profile/'.Auth::user()->id) }}">{{ trans('user::names.profile.view') }}</a>
+        <a href="{{ url('/user/profile/edit') }}">{{ trans('user::names.profile.edit') }}</a>
         <div class="title"><a href="/logout">{{ trans('user::names.logout') }}</a></div>
     @endif
 
