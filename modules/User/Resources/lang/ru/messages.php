@@ -6,9 +6,12 @@
     #Validation
     'email.validation.email' => 'Введен некорректный e-mail адресс.',
     'email.validation.unique' => 'Такой e-mail уже зарегистрирован у нас',
+    'email.validation.required' => 'Нужно ввести email',
     'tokenNotFound' => 'Пользователя с таким ключом активации не найдено, возможно вы уже активировали свой аккаунт.',
     'validation.required' => 'Нужно заполнить поле :att',
     'validation.unique' => 'Такой :att у нас уже зарегистрирован',
     'authorization.errors' => 'У нас возникли проблемы при авторизации',
     'auth.failed' => 'Пользователя с таким логином и/или паролем не найдено',
+    'validation.min.string' => 'Поле :att должно местить минимум 6 символов',
+    'data.saved' => 'Изменения успешно сохранены',
 ];

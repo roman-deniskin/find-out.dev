@@ -50,7 +50,7 @@ class UserController extends Controller {
 	}
 
     public function profile(Request $request){
-        $account = User::find($request->id)->first();
+        $account = User::find($request->id);
 
         if($account){
             return view('user::profile', [
@@ -78,7 +78,7 @@ class UserController extends Controller {
 
             $this->save($request->all());
 
-            return redirect(url('/user/profile/edit'))->with('message', trans('messages.DATA_SAVED'));
+            return redirect(url('/user/profile/edit'))->with('message', trans('user::messages.data.saved'));
 
         }else{
 			return redirect(url('/'))->with('message', trans('user::messages.tokenNotFound'));
