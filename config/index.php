@@ -1,5 +1,6 @@
 <?php
 
 return [
-	'name' => 'Index'
+	'name' => 'Index',
+	'application' => 'Find Out'
 ];
