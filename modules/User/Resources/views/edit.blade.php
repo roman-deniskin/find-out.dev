@@ -2,11 +2,10 @@
 
 @section('content')
 
-    <h1>Hello World</h1>
+    <h1>{{ trans('user::names.profile.edit') }}</h1>
 
-    @if (count($errors) > 0)
+    @if ($errors->has())
         <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -15,28 +14,24 @@
         </div>
     @endif
 
-    <p>
-        {{ trans('messages.PLZ_FILL_ALL_FIELDS') }}
-    </p>
-
     <form role="form" method="post" action="{{ url('user/profile/update') }}">
         {!! csrf_field() !!}
 
-        <label for="email">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Name" name="name" value="{{ $account->name }}"><br>
+        <label for="name">{{ trans('user::names.name') }}</label>
+        <input type="text" class="form-control" id="name" placeholder="{{ trans('user::names.name') }}" name="name" value="{{ $account->name }}"><br>
 
-        <label for="email">Surname</label>
-        <input type="text" class="form-control" id="name" placeholder="Surname" name="surname" value="{{ $account->surname }}"><br>
+        <label for="email">{{ trans('user::names.surname') }}</label>
+        <input type="text" class="form-control" id="name" placeholder="{{ trans('user::names.surname') }}" name="surname" value="{{ $account->surname }}"><br>
 
-        <label for="gender">Gender</label>
+        <label for="gender">{{ trans('user::names.gender') }}</label>
         <select name="gender" id="gender">
-            <option value="1">Men</option>
-            <option value="0" {{  ($account->gender != 1) ? 'selected' : null }}>Women</option>
+            <option value="1">{{ trans('user::names.gender.men') }}</option>
+            <option value="0" {{  ($account->gender != 1) ? 'selected' : null }}>{{ trans('user::names.gender.women') }}</option>
         </select>
 
         <br>
 
-        <button type="submit" class="btn btn-default">save</button>
+        <button type="submit" class="btn btn-default">{{ trans('user::names.profile.save') }}</button>
     </form>
 
 @stop
