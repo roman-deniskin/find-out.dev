@@ -138,13 +138,15 @@ return [
          * Модули
          * http://sky.pingpong-labs.com/docs/2.0/modules
          */
-	    'Pingpong\Modules\ModulesServiceProvider',
+	    Pingpong\Modules\ModulesServiceProvider::class,
 
         /*
          * Менеджер изображений
          * https://github.com/anakadote/ImageManager-for-Laravel-5
          */
         Anakadote\ImageManager\ImageManagerServiceProvider::class,
+
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

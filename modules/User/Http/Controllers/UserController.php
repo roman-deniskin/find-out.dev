@@ -141,7 +141,7 @@ class UserController extends Controller {
 
 		$this->createAccount($request->all());
 
-        return redirect(url('/'))->with('message', trans('messages.DISABLED_ACCOUNT_CREATED'));
+        return redirect(url('/'))->with('message', trans('user::messages.DISABLED_ACCOUNT_CREATED'));
 	}
 
 	/**
@@ -158,7 +158,7 @@ class UserController extends Controller {
 
         Mail::send('user::mails/welcome', ['url' => $url], function($message) use ($data)
         {
-            $message->to($data['email'])->subject(trans('messages.ACCOUNT_CONFIRMATION'));
+            $message->to($data['email'])->subject(trans('user::messages.ACCOUNT_CONFIRMATION'));
         });
 
 		return UsersActivation::create($data);
@@ -217,7 +217,7 @@ class UserController extends Controller {
             'surname' => 'max:255',
             'gender' => 'in:0,1',
             'login' => 'required|max:255|unique:users',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6|max:100',
         ]);
     }
 

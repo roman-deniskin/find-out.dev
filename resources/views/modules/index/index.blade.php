@@ -11,7 +11,7 @@
 
         @if($errors->has())
             <div class="alert alert-danger">
-                {{ trans('user::messages.ERROR_IN_REG1') }}<br><br>
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>

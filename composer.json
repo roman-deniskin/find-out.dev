@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "pingpong/modules": "~2.0",
-        "anakadote/laravel-5-image-manager": "dev-master"
+        "anakadote/laravel-5-image-manager": "dev-master",
+        "barryvdh/laravel-ide-helper": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -33,6 +34,7 @@
     "scripts": {
         "post-install-cmd": [
             "php artisan clear-compiled",
+            "php artisan ide-helper:generate",
             "php artisan optimize"
         ],
         "pre-update-cmd": [
