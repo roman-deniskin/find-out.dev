@@ -7,5 +7,6 @@
     #buttons/links
     'registration' => 'Регистрация',
     'register' => 'Зарегистрироваться',
+    'authorization' => 'Авторизация',
 
 ];
