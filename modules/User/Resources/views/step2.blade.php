@@ -1,8 +1,12 @@
 @extends('layouts.master')
 
+@section('head')
+<link href="{{ asset("css/register.css") }}" rel="stylesheet">
+@endsection
+
 @section('content')
 
-    <div class="container">
+    <div class="container registerForm col-md-12">
 
         @if ($errors->has())
             <div class="card-panel teal">
@@ -24,52 +28,78 @@
             </div>
         @endif
 
-        <p>
+        <h1 class="H1Text greetingText">
             {{ trans('user::messages.PLZ_FILL_ALL_FIELDS') }}
-        </p>
+        </h1>
 
-        <form role="form" method="post" action="{{ url('user/save') }}">
+        <form class="form-horizontal" role="form" method="post" action="{{ url('user/save') }}">
             {!! csrf_field() !!}
 
-
-            <label for="email">E-mail</label>
-            <input type="hidden" class="form-control" name="email" value="{{ $email }}">
-            <input type="text" class="form-control" id="email" placeholder="Email" name="email" value="{{ $email }}"
-                   disabled><br>
-
-            <label for="name">{{ trans('user::names.name') }}</label>
-            <input type="text" class="form-control" id="name" placeholder="{{ trans('user::names.name') }}" name="name"
-                   value="{{ old('name') }}"><br>
-
-            <label for="surname">{{ trans('user::names.surname') }}</label>
-            <input type="text" class="form-control" id="name" placeholder="{{ trans('user::names.surname') }}"
-                   name="surname" value="{{ old('surname') }}"><br>
-
-
+            <div class="form-group settingsBlock col-md-12">
+              <label class="col-md-2 col-md-offset-3 control-label">{{ trans('user::names.login') }}:</label>
+              <div class="col-md-3 inputWraper">
+                <input type="text" autocomplete="off" placeholder="{{ trans('user::names.login') }}" class="inputRegisterField" value="" name="login" required="true">
+              </div>
+              <div class="col-md-3 hintWarper">
+                <div class="col-md-3 hint" id="">
+                  <p>С помощью логина и пароля вы будите заходить на сайт.</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-group settingsBlock col-md-12">
+              <label class="col-md-2 col-md-offset-3 control-label">{{ trans('user::names.password') }}:</label>
+              <div class="col-md-3 inputWraper">
+                <input type="password" autocomplete="off" placeholder="{{ trans('user::names.password') }}" class="inputRegisterField" value="" name="password" required="true">
+              </div>
+              <div class="col-md-3 hintWarper">
+                <div class="col-md-3 hint">
+                  <p>С помощью логина и пароля вы будите заходить на сайт.</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-group settingsBlock col-md-12">
+              <label class="col-md-2 col-md-offset-3 control-label">{{ trans('user::names.name') }}:</label>
+              <div class="col-md-3 inputWraper">
+                <input type="text" autocomplete="off" placeholder="{{ trans('user::names.name') }}" class="inputRegisterField" value="" name="name" required="true">
+              </div>
+              <div class="col-md-3 hintWarper">
+                <div class="col-md-3 hint">
+                  <p>Указывайте только ваше настоящее имя. Это нужно для того, чтобы вас могли находить ваши друзья в поиске.</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-group settingsBlock col-md-12">
+              <label class="col-md-2 col-md-offset-3 control-label">{{ trans('user::names.surname') }}:</label>
+              <div class="col-md-3 inputWraper">
+                <input type="text" autocomplete="off" placeholder="{{ trans('user::names.surname') }}" class="inputRegisterField" value="" name="surname" required="true">
+              </div>
+              <div class="col-md-3 hintWarper">
+                <div class="col-md-3 hint">
+                  <p>В этом поле введите свою настоящую фамилию. Не следует указывать вымешленную фамилию иначе вас не найдут друзья. Фамилия и имя показывается на странице вашего профиля и не будет видна при отправке анонимных сообщений.</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-group settingsBlock col-md-12">
+              <label class="col-md-2 col-md-offset-3 control-label">Псевдоним:</label>
+              <div class="col-md-3 inputWraper">
+                <input type="text" autocomplete="off" placeholder="Псевдоним" class="inputRegisterField" value="" name="anonymNick" required="true">
+              </div>
+              <div class="col-md-3 hintWarper">
+                <div class="col-md-4 hint">
+                  <p>Это ваш псевдоним (вымышленное имя). Если вы отправите кому то анонимное сообщение или анонимный комментирий, то будет виден только ваш псевдоним. Не в коем случае не указывайте в качестве псевдонима никаких данных по которым можно будет догадаться о том, кто вы в т.ч. реальные имя и фамилию.</p>
+                </div>
+              </div>
+            </div>
             <div class="input-field col s12">
                 <select id="gender" name="gender">
                     <option value="1">{{ trans('user::names.gender.men') }}</option>
                     <option value="0">{{ trans('user::names.gender.women') }}</option>
                 </select>
                 <label for="gender">{{ trans('user::names.gender') }}</label>
-
             </div>
-
-            <div class="row">
-
-                <div class="input-field col s12">
-                    <input id="login" name="login" type="text">
-                    <label for="login">{{ trans('user::names.login') }}</label>
-                </div>
-
-                <div class="input-field col s12">
-                    <input id="password" name="password" type="password">
-                    <label for="password">{{ trans('user::names.password') }}</label>
-                </div>
-
+            <div class="col-md-12 registerButtonWarper">
+                <button type="submit" class="button">{{ trans('user::names.registration') }}</button>
             </div>
-
-            <button type="submit" class="btn btn-default">{{ trans('user::names.register') }}</button>
         </form>
     </div>
 @stop

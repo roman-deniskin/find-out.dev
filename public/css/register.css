@@ -1,0 +1,173 @@
+h1.greetingText{
+    text-align: center;
+    margin-bottom: 30px;
+}
+.entryText {
+    margin-top: 0;
+}
+.settingsBlock {
+    padding: 10px 0px;
+}
+.registerInputWrapper
+{
+	border: 1px solid #127C97;
+    position: relative;
+    display: inline-block;
+    width: 240px;
+}
+input.registerInput {
+    border: 0;
+    height: 32px;
+    padding-left: 5px;
+    width: 140px;
+}
+.registerForm 
+{
+    border: dotted 1px;
+    border-color: #2288a2;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+.inputRegisterField {
+    width: 100%;
+}
+.hint {
+    width: 100%;
+    background: #4A8AC6;
+    color: #FFF;
+    padding: 10px;
+    display: none;
+    position: absolute;
+    z-index: 100;
+}
+.hint:before {
+    position: absolute;
+    left: -11px;
+    top: 8px;
+    border-style: solid;
+    border-width: 0 12px 12px 0;
+    border-color: transparent #4a8ac6 transparent transparent;
+    _border-color: #000000 #4a8ac6 #000000 #000000;
+    _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
+    content: "";
+}
+.hintWarper p {
+    margin: 0;
+    font-size: 12px;
+}
+.control-label {
+    font-size: 12px;
+    font-weight: 100;
+    padding: 0;
+    margin-left: 10px;
+}
+input.registerInput:focus + .hint { display: inline-block; }
+@media (max-width: 768px)
+{
+    .hint {
+        position: relative;
+        margin-top: 10px;
+    }
+    .hint:before {
+        position: absolute;
+        left: 8px;
+        top: -10px;
+        content: "";
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 12px 0 0 12px;
+        border-color: transparent transparent transparent #4a8ac6;
+        line-height: 0px;
+        _border-color: #000000 #000000 #000000 #4a8ac6;
+        _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
+    }
+    .textWraper
+    {
+        text-align: right;
+        margin-left: 10px;
+    }
+}
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 992px) {
+    .hint {
+        position: relative;
+        margin-top: 10px;
+    }
+    .hint:before {
+        position: absolute;
+        left: 8px;
+        top: -10px;
+        content: "";
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 12px 0 0 12px;
+        border-color: transparent transparent transparent #4a8ac6;
+        line-height: 0px;
+        _border-color: #000000 #000000 #000000 #4a8ac6;
+        _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
+    }
+    .textWraper
+    {
+        text-align: right;
+        margin-left: 10px;
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1200px) {
+    .hintWarper
+    {
+        padding-left: 5px;
+    }
+    .hint {
+        position: absolute;
+        margin-top: 10px;
+    }
+    .textWraper
+    {
+        text-align: right;
+        margin-left: 10px;
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { 
+    .hint {
+        position: absolute;
+    }
+    .textWraper
+    {
+        text-align: right;
+    }
+}
+.registerButtonWarper {
+    margin: auto 0;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    margin-top: 10px;
+    width: 100%;
+}
+.registerButton
+{
+	-webkit-transition: top 1s ease-out 0.5s;
+    -moz-transition: top 1s ease-out 0.5s;
+    -o-transition: top 1s ease-out 0.5s;
+    transition: top 1s ease-out 0.5s;
+    width: 80px;
+}
+.registerInputWrapper
+{
+	width: 222px;
+}
+.textWraper {
+    font-size: 12px;
+    padding-right: 0;
+    margin-top: 5px;
+}
+.inputWraper {
+    padding-left: 5px;
+}
