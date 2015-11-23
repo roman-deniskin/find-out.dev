@@ -57,7 +57,7 @@
 
         @else
             <a class="waves-effect waves-light btn"
-               href="{{ url('/user/profile/'.Auth::user()->id) }}">{{ trans('user::names.profile.view') }}</a>
+               href="{{ url('/user/profile/user'.Auth::user()->id) }}">{{ trans('user::names.profile.view') }}</a>
             <a class="waves-effect waves-light btn"
                href="{{ url('/user/profile/edit') }}">{{ trans('user::names.profile.edit') }}</a>
             <a class="waves-effect waves-light btn" href="/logout">{{ trans('user::names.logout') }}</a>
