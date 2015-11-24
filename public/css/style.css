@@ -1,14 +1,274 @@
-/* Custom Stylesheet */
-/**
- * Use this file to override Materialize files so you can update
- * the core Materialize files in the future
- *
- * Made By MaterializeCSS.com
- */
-
-.icon-block {
-  padding: 0 15px;
+html {
+    position: relative;
+    min-height: 100%;
 }
-.icon-block .material-icons {
-	font-size: inherit;
+body {
+    /* Тут укажи высоту футера */
+    margin-bottom: 60px;
+    font-family: 'Open Sans', sans-serif;
+}
+p {
+    color: #a1a1a1;
+    font-size: 13px;
+}
+ul, ol {
+    margin-bottom: 0;
+}
+li {
+    list-style-type: none; /* Убираем маркеры */
+}
+ul {
+    margin-left: 0; /* Отступ слева в браузере IE и Opera */
+    padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
+}
+li.leftMenuLi {
+    height: 36px;
+    color: #FFF;
+    padding: 8px 8px;
+}
+li.leftMenuLi:hover{
+    background: #a1a1a1;
+    font-weight: bold;
+}
+.leftAvatar {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+img.leftAvatarImg {
+    position: relative;
+    display: inline-block;
+    max-height: 140px;
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 999px;
+}
+.leftCol {
+    height: 100%;
+    position: relative;
+    background: #464646;
+    padding: 0;
+}
+.profileSwitch {
+    margin-bottom: 10px;
+    padding: 0 25px;
+}
+.switch {
+    width: 17px;
+    height: 40px;
+    background: #636363;
+    border-radius: 3px;
+    border: 1px solid #a2a2a2;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    cursor: pointer;
+}
+.switcher {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 50%;
+    -webkit-box-shadow: inset 0px -2px 6px 0px rgba(50, 50, 50, 0.8);
+    -moz-box-shadow: inset 0px -2px 6px 0px rgba(50, 50, 50, 0.8);
+    box-shadow: inset 0px -2px 6px 0px rgba(50, 50, 50, 0.8);
+    background: #5fb2ff url("../img/profile/strips.png") no-repeat 2px 5px;
+    cursor: pointer;
+}
+.profileSwitchTextWarper {
+    width: 80%;
+    display: inline-block;
+}
+.profileSwitchText {
+    font-size: 10px;
+    color: #FFF;
+    position: relative;
+    display: inline-block;
+    padding-left: 7px;
+    vertical-align: top;
+    cursor: pointer;
+}
+.iconWraper {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+.leftMenuLink {
+    text-decoration: none;
+}
+.active {
+    background: #a1a1a1 !important;
+    font-weight: bold;
+}
+.leftMenuCounter {
+    display: inline-block;
+    position: absolute;
+    background: #5fb2ff;
+    border-radius: 50px;
+    font-size: 11px;
+    height: 15px;
+    width: 15px;
+    text-align: center;
+    left: 7px;
+    bottom: -3px;
+}
+.search {
+    width: 300px; /* Ширина поля с кнопкой */
+    border: 1px solid #000; /* Параметры рамки */
+    min-height: 20px; /* Минимальная высота */
+}
+   input[type="search"] {
+    border: none; /* Убираем рамку */
+    outline: none; /* Убираем свечение в Chrome и Safari */
+    -webkit-appearance: none; /* Убираем рамку в Chrome и Safari */
+    width: 274px;
+    vertical-align: middle; /* Выравнивание по середине */
+}
+   input[type="submit"] {
+    width: 20px;
+    height: 20px;
+    border: none;
+}
+input{
+    padding: 0px 7px;
+    border: 1px solid #a1a1a1;
+    height: 32px;
+    font-size: 12px;
+}
+.button {
+    background: #5fb2ff;
+    width: 140px;
+    height: 30px;
+    border: 0;
+    color: #FFF;
+    border: 2px solid #FFF;
+}
+.button:hover {
+    background: #5fb2ff;
+    color: #FFF;
+    border: 0;
+}
+.button:active {
+    border: 0;
+    box-shadow: inset 3px 3px 9px rgba(0,0,0,0.2);
+}
+.header {
+	background: #4A8AC6;
+	width: 100%;
+    height: 50px;
+    display: inline-block;
+    position: relative;
+}
+.logo {
+    background: url("../img/logo.png") 0px 7px no-repeat;
+    background-size: 160px;
+    height: 49px;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    position: relative;
+    width: 160px;
+}
+.entryContainer {
+    position: absolute;
+    display: none;
+    height: auto;
+    background: #FFF;
+    right: 0;
+    z-index: 100;
+    border: 2px solid #5fb2ff;
+    margin: 5px 30px;
+    padding: 10px 30px;
+    top: -5px;
+}
+.inputEntryField {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.entryContainerButton {
+    width: 100%;
+    background: #4A8AC6;
+}
+..entryContainerButton:hover {
+
+}
+.H1Text{
+    font-size: 17px;
+    color: #aeaeae;
+    margin: 10px 0;
+}
+.rightHeaderBlock {
+    float: right;
+    display: inline-block;
+    position: relative;
+    margin-top: 10px;
+    text-align: right;
+}
+p.rightHeaderBlockText {
+    display: inline-block;
+    position: relative;
+    margin-right: 15px;
+    color: #FFF;
+    font-weight: 500;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Тут укажи высоту футера */
+  height: 60px;
+}
+.bottomMenu {
+    border-top: 1px solid #a1a1a1;
+    text-align: center;
+    margin-top: 14px;
+}
+
+li.bottomMenuLi {
+    display: inline-block;
+    list-style-type: none;
+    color: #a1a1a1;
+    margin: 0 10px;
+    margin-top: 5px;
+}
+@media only screen and (min-width: 480px) and (max-width: 768px),
+only screen and (min-device-width: 480px) and (max-device-width: 768px) {
+    .button {
+        width: 100px;
+        height: 28px;
+    }
+    .logo{
+        width: 100px;
+        background: url("../img/logo.png") 0px 16px no-repeat;
+        background-size: 100px;
+    }
+    p.rightHeaderBlockText {
+        font-size: 10px;
+    }
+    .bottomMenuLi {
+        font-size: 10px;
+    }
+}
+@media only screen and (min-width: 200px) and (max-width: 480px),
+only screen and (min-device-width: 200px) and (max-device-width: 480px) {
+    .button {
+        width: 60px;
+        height: 26px;
+    }
+    .logo{
+        width: 65px;
+        background: url("../img/logo.png") 0px 19px no-repeat;
+        background-size: 74px;
+    }
+    p.rightHeaderBlockText {
+        font-size: 7px;
+        height: 23px;
+        width: 65px;
+        margin-right: 5px;
+    }
+    .bottomMenuLi {
+        font-size: 7px;
+    }
 }
