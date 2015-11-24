@@ -8,11 +8,11 @@
     <meta name="description" content="@yield('description')">
     <meta name="keywords" content="@yield('keywords')">
     <meta name="author" content="Find-Out">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap -->
     <link href="{{ asset('css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
 	  <!-- User styles -->
     <link href="{{ asset('css/style.css') }}" type="text/css" rel="stylesheet"/>
-    <link href="css" type="text/css" rel="stylesheet"/>
     
     <!-- Google fonts -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
@@ -43,8 +43,8 @@
               <h2 class="H1Text entryText">{{ trans('user::names.authorization') }}</h2>
                     <form role="form" method="POST" action="{{ url('/login') }}">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="text" autocomplete="off" placeholder="{{ trans('user::names.login') }}" class="inputEntryField" name="login" required="true" value="{{ old('login') }}"/>
-                        <input type="password" autocomplete="off" placeholder="{{ trans('user::names.password') }}" class="inputEntryField" value="" name="password" required="true" value="{{ old('password') }}"/>
+                        <input type="text" placeholder="{{ trans('user::names.login') }}" class="inputEntryField" name="login" required="true" value="{{ old('login') }}"/>
+                        <input type="password" placeholder="{{ trans('user::names.password') }}" class="inputEntryField" value="" name="password" required="true" value="{{ old('password') }}"/>
 
                         <button class="button entryContainerButton">{{ trans('user::names.authorization') }}</button>
                     </form>

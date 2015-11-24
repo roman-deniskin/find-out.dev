@@ -34,7 +34,7 @@
 
         <form class="form-horizontal" role="form" method="post" action="{{ url('user/save') }}">
             {!! csrf_field() !!}
-
+            <input type="hidden" value="{{ $email }}" name="email" />
             <div class="form-group settingsBlock col-md-12">
               <label class="col-md-2 col-md-offset-3 control-label">{{ trans('user::names.login') }}:</label>
               <div class="col-md-3 inputWraper">
