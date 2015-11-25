@@ -16,9 +16,7 @@ Route::group(['namespace' => 'Modules\User\Http\Controllers'], function()
 	Route::get('login', 'UserController@getLogin');
 	Route::post('login', 'UserController@postLogin');
 	Route::get('logout', 'UserController@getLogout');
-	// Registration routes
-	Route::get('registration', 'UserController@getRegistration');
-	Route::post('registration', 'UserController@postRegistration');
 
-	#Route::controllers(['password' => 'PasswordController',]);
+	// Registration routes
+	Route::post('registration', 'UserController@postRegistration');
 });

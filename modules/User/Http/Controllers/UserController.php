@@ -32,6 +32,18 @@ class UserController extends Controller {
     protected  $redirectPath = '/';
 
 	/**
+	 * Указывает на страницу авторизации
+	 * @var string
+	 */
+    protected  $loginPath = '/login';
+
+	/**
+	 * Поле по которому идет авторизация (Логин пользователя)
+	 * @var string
+	 */
+	protected $username = 'login';
+
+	/**
 	 * Подключение посредника guest для блокировки доступа
 	 * к некоторым страницам неавторизированным пользователям
 	 */
@@ -40,20 +52,20 @@ class UserController extends Controller {
 		$this->middleware('guest', ['except' => ['getLogout', 'update', 'profile', 'postUpdate']]);
 	}
 
-	public function getRegistration()
-	{
-		return view('user::register');
-	}
-
-    public function profile(Request $request){
-        $account = User::find($request->id);
+	/**
+	 * Выводит профиль пользователя
+	 * @param $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+    public function profile($id){
+        $account = User::find($id);
 
         if($account){
             return view('user::profile', [
                 'account' => $account,
             ]);
         }else{
-            throw new NotFoundHttpException('User with this token not found');
+            throw new NotFoundHttpException(trans('user::messages.user.not_found'));
         }
 
     }
@@ -68,7 +80,11 @@ class UserController extends Controller {
 
         if($account){
 
-            $validator = $this->updateValidator($request->all());
+            $validator = Validator::make($request->all(), [
+				'name' => 'max:255',
+				'surname' => 'max:255',
+				'gender' => 'in:0,1',
+			]);
 
             if ($validator->fails()) {
                 $this->throwValidationException(
@@ -90,11 +106,10 @@ class UserController extends Controller {
     }
 
 	/**
-	 * Выводим страницу изменения данных аккаунта
-	 * @param Request $request
+	 * Страница изменения данных аккаунта
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
 	 */
-    public function update(Request $request){
+    public function update(){
         $account = Auth::user();
 
         if($account){
@@ -184,14 +199,21 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Handle a registration request for the application.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
+	 * Регистрация пользователя
+	 * Создание неактивной учетски в таблице users_activation
+	 * @param Request $request
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
 	public function postSave(Request $request)
 	{
-		$validator = $this->valid($request->all());
+		$validator = Validator::make($request->all(), [
+			'email' => 'required|email|max:255|unique:users',
+			'name' => 'max:255|min:1',
+			'surname' => 'max:255|min:1',
+			'gender' => 'in:0,1',
+			'login' => 'required|max:255|min:2|unique:users',
+			'password' => 'required|min:6|max:100',
+		]);
 
 		if ($validator->fails()) {
 			$this->throwValidationException(
@@ -199,60 +221,29 @@ class UserController extends Controller {
 			);
 		}
 
-		Auth::login($this->create($request->all()));
+		$data = $request->all();
 
-        $account = UsersActivation::where('email', $request->email)->first();
-        $account->delete();
-
-		return redirect($this->redirectPath());
-	}
-
-	/**
-     * Get a validator for an incoming editing account request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function valid(array $data)
-    {
-        return Validator::make($data, [
-            'email' => 'required|email|max:255|unique:users',
-            'name' => 'max:255|min:1',
-            'surname' => 'max:255|min:1',
-            'gender' => 'in:0,1',
-            'login' => 'required|max:255|min:2|unique:users',
-            'password' => 'required|min:6|max:100',
-        ]);
-    }
-
-
-    protected function updateValidator(array $data)
-    {
-        return Validator::make($data, [
-            #'email' => 'email|max:255',
-            'name' => 'max:255',
-            'surname' => 'max:255',
-            'gender' => 'in:0,1',
-            #'login' => 'max:255',
-            #'password' => 'required|min:6',
-        ]);
-    }
-
-	/**
-	 * Create a new user instance after a valid registration.
-	 *
-	 * @param  array  $data
-	 * @return User
-	 */
-	protected function create(array $data)
-	{
-		return User::create([
+		$user = User::create([
 			'login' => $data['login'],
 			'name' => $data['name'],
 			'surname' => $data['surname'],
 			'email' => $data['email'],
 			'password' => bcrypt($data['password']),
 		]);
+
+		if($user) {
+			//Сразу Авторизовываем его
+			Auth::login($user);
+			//Удаляем неактивированный аккаунт
+			$account = UsersActivation::where('email', $request->email)->first();
+			$account->delete();
+
+			return redirect($this->redirectPath());
+		}else{
+			return redirect($this->redirectPath())->with([
+				'message' => trans('user::messages.reg.something_goes_wrong'),
+			]);
+		}
 	}
 
 	/**
@@ -266,10 +257,9 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Handle a login request to the application.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
+	 * Авторизация пользователя
+	 * @param Request $request
+	 * @return $this|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
 	 */
 	public function postLogin(Request $request)
 	{
@@ -277,9 +267,6 @@ class UserController extends Controller {
 			$this->loginUsername() => 'required', 'password' => 'required',
 		]);
 
-		// If the class is using the ThrottlesLogins trait, we can automatically throttle
-		// the login attempts for this application. We'll key this by the username and
-		// the IP address of the client making these requests into this application.
 		$throttles = $this->isUsingThrottlesLoginsTrait();
 
 		if ($throttles && $this->hasTooManyLoginAttempts($request)) {
@@ -292,9 +279,6 @@ class UserController extends Controller {
 			return $this->handleUserWasAuthenticated($request, $throttles);
 		}
 
-		// If the login attempt was unsuccessful we will increment the number of attempts
-		// to login and redirect the user back to the login form. Of course, when this
-		// user surpasses their maximum number of attempts they will get locked out.
 		if ($throttles) {
 			$this->incrementLoginAttempts($request);
 		}
@@ -306,13 +290,7 @@ class UserController extends Controller {
 			]);
 	}
 
-	/**
-	 * Send the response after the user was authenticated.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  bool  $throttles
-	 * @return \Illuminate\Http\Response
-	 */
+/*
 	protected function handleUserWasAuthenticated(Request $request, $throttles)
 	{
 		if ($throttles) {
@@ -325,26 +303,21 @@ class UserController extends Controller {
 
 		return redirect()->intended($this->redirectPath());
 	}
-
-	/**
-	 * Get the needed authorization credentials from the request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return array
-	 */
+*/
+	/*
 	protected function getCredentials(Request $request)
 	{
 		return $request->only($this->loginUsername(), 'password');
-	}
+	}*/
 
 	/**
-	 * Get the failed login message.
-	 *
+	 * Указываем сообщение об ошибке
+	 * в Случае неправильного ввода данных при авторизации
 	 * @return string
 	 */
 	protected function getFailedLoginMessage()
 	{
-		return Lang::has('auth.failed')
+		return Lang::has('user::messages.auth.failed')
 			? Lang::get('auth.failed')
 			: 'auth.failed';
 	}
@@ -353,45 +326,50 @@ class UserController extends Controller {
 	 * Log the user out of the application.
 	 *
 	 * @return \Illuminate\Http\Response
-	 */
+
 	public function getLogout()
 	{
 		Auth::logout();
 
 		return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
-	}
+	}*/
+
 
 	/**
 	 * Get the path to the login route.
 	 *
 	 * @return string
-	 */
+
+
 	public function loginPath()
 	{
 		return property_exists($this, 'loginPath') ? $this->loginPath : '/login';
-	}
+	}*/
 
 	/**
 	 * Get the login username to be used by the controller.
 	 *
 	 * @return string
 	 */
+
+/*
 	public function loginUsername()
 	{
 		return property_exists($this, 'email') ? $this->email : 'login';
 	}
-
+*/
 	/**
 	 * Determine if the class is using the ThrottlesLogins trait.
 	 *
 	 * @return bool
 	 */
+/*
 	protected function isUsingThrottlesLoginsTrait()
 	{
 		return in_array(
 			ThrottlesLogins::class, class_uses_recursive(get_class($this))
 		);
 	}
-
+*/
 }
 
