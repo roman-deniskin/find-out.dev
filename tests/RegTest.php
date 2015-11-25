@@ -6,7 +6,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RegTest extends TestCase
 {
-
+    /**
+     * Обычная регистрация
+     */
     public function testRegistration()
     {
         $email = str_random(6).'@test.ru';
@@ -22,6 +24,9 @@ class RegTest extends TestCase
 
     }
 
+    /**
+     * Регистрация с невалидным емеилом
+     */
     public function testFailedRegistration()
     {
         $email = '\',//.,qrqqw@test.ru';
@@ -34,6 +39,25 @@ class RegTest extends TestCase
         $this->dontSeeInDatabase('users_activation', [
             'email' => $email
         ]);
+
+    }
+
+    /**
+     * Регистрация с существующим емеилом в БД
+     */
+    public function testSecondReg()
+    {
+        $email = str_random(6).'@test.ru';
+
+        $this->visit('/')
+            ->type($email, 'email')
+            ->press('Регистрация')
+            ->see('Вы успешно зарегистрировались!');
+
+        $this->visit('/')
+            ->type($email, 'email')
+            ->press('Регистрация')
+            ->see('Упс. Похоже не удалось вас зарегистрировать:');
 
     }
 
