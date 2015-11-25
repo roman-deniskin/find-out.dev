@@ -247,9 +247,8 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Show the application login form.
-	 *
-	 * @return \Illuminate\Http\Response
+	 * Выводим страницу авторизации
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
 	 */
 	public function getLogin()
 	{
@@ -290,31 +289,6 @@ class UserController extends Controller {
 			]);
 	}
 
-/*
-	protected function handleUserWasAuthenticated(Request $request, $throttles)
-	{
-		if ($throttles) {
-			$this->clearLoginAttempts($request);
-		}
-
-		if (method_exists($this, 'authenticated')) {
-			return $this->authenticated($request, Auth::user());
-		}
-
-		return redirect()->intended($this->redirectPath());
-	}
-*/
-	/*
-	protected function getCredentials(Request $request)
-	{
-		return $request->only($this->loginUsername(), 'password');
-	}*/
-
-	/**
-	 * Указываем сообщение об ошибке
-	 * в Случае неправильного ввода данных при авторизации
-	 * @return string
-	 */
 	protected function getFailedLoginMessage()
 	{
 		return Lang::has('user::messages.auth.failed')
@@ -322,54 +296,5 @@ class UserController extends Controller {
 			: 'auth.failed';
 	}
 
-	/**
-	 * Log the user out of the application.
-	 *
-	 * @return \Illuminate\Http\Response
-
-	public function getLogout()
-	{
-		Auth::logout();
-
-		return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
-	}*/
-
-
-	/**
-	 * Get the path to the login route.
-	 *
-	 * @return string
-
-
-	public function loginPath()
-	{
-		return property_exists($this, 'loginPath') ? $this->loginPath : '/login';
-	}*/
-
-	/**
-	 * Get the login username to be used by the controller.
-	 *
-	 * @return string
-	 */
-
-/*
-	public function loginUsername()
-	{
-		return property_exists($this, 'email') ? $this->email : 'login';
-	}
-*/
-	/**
-	 * Determine if the class is using the ThrottlesLogins trait.
-	 *
-	 * @return bool
-	 */
-/*
-	protected function isUsingThrottlesLoginsTrait()
-	{
-		return in_array(
-			ThrottlesLogins::class, class_uses_recursive(get_class($this))
-		);
-	}
-*/
 }
 
