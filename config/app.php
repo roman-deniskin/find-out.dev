@@ -135,17 +135,20 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /*
-         * Ìîäóëè
+         * ÐœÐ¾Ð´ÑƒÐ»Ð¸
          * http://sky.pingpong-labs.com/docs/2.0/modules
          */
 	    Pingpong\Modules\ModulesServiceProvider::class,
 
         /*
-         * Ìåíåäæåð èçîáðàæåíèé
+         * ÐœÐµÐ½ÐµÐ´Ð¶ÐµÑ€ Ð¸Ð·Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ð¹
          * https://github.com/anakadote/ImageManager-for-Laravel-5
          */
         Anakadote\ImageManager\ImageManagerServiceProvider::class,
 
+        /*
+         * Helper for IDE (phpStorm) -- Ð¾Ñ‚ÐºÐ»ÑŽÑ‡Ð°Ñ‚ÑŒ Ð½Ð° Ð¿Ñ€Ð¾Ð´Ð°ÐºÑˆÐµÐ½Ðµ
+         */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
@@ -195,7 +198,7 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-	    'Module' => 'Pingpong\Modules\Facades\Module',
+	    'Module'    => Pingpong\Modules\Facades\Module::class,
     ],
 
 ];

@@ -1,5 +1,5 @@
-{{ trans('user.WELCOME_EMAIL') }}
+{{ trans('user::messages.WELCOME_EMAIL') }}
+<hr>
+{{ trans('user::messages.FOR_CONFIRM_GO_TO') }}
 <br>
-{{ trans('user.FOR_CONFIRM_GO_TO') }}
-<br>
-{!! $url !!}
+<a href="{!! $url !!}">{!! $url !!}</a>

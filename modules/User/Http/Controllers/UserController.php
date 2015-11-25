@@ -1,43 +1,39 @@
 <?php namespace Modules\User\Http\Controllers;
 
-use Illuminate\Support\Facades\Mail;
-use Modules\User\Entities\UsersActivation;
-use Pingpong\Modules\Module;
 use Pingpong\Modules\Routing\Controller;
-use Modules\User\Entities\User;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Validator;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-#use Modules\User\Auth\AuthenticatesAndRegistersUsers;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
+use Modules\User\Entities\UsersActivation;
+use Modules\User\Entities\User;
+
+use Validator;
+
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Support\Facades\Mail;
+
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller {
 
-	/*
-    |--------------------------------------------------------------------------
-    | Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
+	/**
+	 * Контроллер который отвечает за регистрацию и авторизацию пользователей
+	 */
 
 	use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
+	/**
+	 * Указатель куда будет переправлен юзер после регистрации/авторизации
+	 * @var string
+	 */
     protected  $redirectTo = '/';
     protected  $redirectPath = '/';
 
 	/**
-	 * Create a new authentication controller instance.
-	 *
-	 * @return void
+	 * Подключение посредника guest для блокировки доступа
+	 * к некоторым страницам неавторизированным пользователям
 	 */
 	public function __construct()
 	{
@@ -57,12 +53,16 @@ class UserController extends Controller {
                 'account' => $account,
             ]);
         }else{
-            //TODO ������� �������� ����� ������
             throw new NotFoundHttpException('User with this token not found');
         }
 
     }
 
+	/**
+	 * Сохранение данных авторизованного пользователя
+	 * @param Request $request
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
     public function postUpdate(Request $request){
         $account = Auth::user();
 
@@ -76,7 +76,11 @@ class UserController extends Controller {
                 );
             }
 
-            $this->save($request->all());
+			$user = Auth::user();
+			$user->name = $request->name;
+			$user->surname = $request->surname;
+			$user->gender = $request->gender;
+			$user->save();
 
             return redirect(url('/user/profile/edit'))->with('message', trans('user::messages.data.saved'));
 
@@ -85,14 +89,11 @@ class UserController extends Controller {
         }
     }
 
-    protected function save(array $data){
-        $user = Auth::user();
-        $user->name = $data['name'];
-        $user->surname = $data['surname'];
-        $user->gender = $data['gender'];
-        return $user->save();
-    }
-
+	/**
+	 * Выводим страницу изменения данных аккаунта
+	 * @param Request $request
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+	 */
     public function update(Request $request){
         $account = Auth::user();
 
@@ -105,8 +106,13 @@ class UserController extends Controller {
         }
     }
 
+	/**
+	 * Выводим страницу активации (второго шага регистрации)
+	 * На ней пользователь заполняет все свои данные
+	 * @param Request $request
+	 * @return bool|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
     public function activation(Request $request){
-
 
         $account = UsersActivation::where('token', $request->token)->first();
 
@@ -116,49 +122,65 @@ class UserController extends Controller {
             ]);
         }else{
 			abort(404, trans('user::messages.tokenNotFound'));
+			return false;
         }
 
     }
 
 	/**
-	 * Handle a registration request for the application.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
+	 * ----------------------
+	 * Регистрация пользователя
+	 * Функция создает в таблице users_activation пользователя
+	 * Отправляет ему письмо на емеил
+	 * После этого он должен активировать свой аккаунт
+	 * его запись перенесется в таблицу users
+	 * там у нас только активированные пользователи
+	 * ----------------------
+	 * @param Request $request
+	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function postRegistration(Request $request)
 	{
-		$validator = $this->validator($request->all());
+		$validator = Validator::make($request->all(), [
+			'email' => 'required|email|max:255|unique:users_activation|unique:users',
+		]);;
 
 		if ($validator->fails()) {
 			$this->throwValidationException(
 				$request, $validator
 			);
 		}
-
-		$this->createAccount($request->all());
-
-        return redirect(url('/'))->with('message', trans('user::messages.DISABLED_ACCOUNT_CREATED'));
-	}
-
-	/**
-	 * Create a new disabled account.
-	 *
-	 * @param  array  $data
-	 * @return UsersActivation
-	 */
-	protected function createAccount(array $data)
-	{
+		/**
+		 * @var $data array
+		 * @var $data['token'] -- Токен пользователя для активации.
+		 */
 		$data['token'] = str_random(32);
 		$data['created_at'] = time();
-        $url = url('/').'/user/activation/'.$data['token'];
+		$url = url('/').'/user/activation/'.$data['token'];
+		$data['email'] = $request->email;
 
-        Mail::send('user::mails/welcome', ['url' => $url], function($message) use ($data)
-        {
-            $message->to($data['email'])->subject(trans('user::messages.ACCOUNT_CONFIRMATION'));
-        });
+		/**
+		 * Отправка письма.
+		 * Шаблон в modules/user/resources/views/mails/
+		 * Прикрепляется ссылка $data['url'] по которой должен перейти пользователь для активации
+		 */
+		Mail::send('user::mails/welcome', ['url' => $url], function($message) use ($data)
+		{
+			$message->to($data['email'])->subject(trans('user::messages.ACCOUNT_CONFIRMATION'));
+		});
 
-		return UsersActivation::create($data);
+		/**
+		 * Создание пользователя.
+		 * Записываем только емеил и токен
+		 */
+		if(UsersActivation::create([
+			'email' => $data['email'],
+			'token' => $data['token'],
+		])) {
+			return redirect(url('/'))->with('message', trans('user::messages.DISABLED_ACCOUNT_CREATED'));
+		}else{
+			return redirect(url('/'))->with('message', trans('user::messages.SAVE_ERROR'));
+		}
 	}
 
 	/**
@@ -186,21 +208,6 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Get a validator for an incoming registration request.
-	 *
-	 * @param  array  $data
-	 * @return \Illuminate\Contracts\Validation\Validator
-	 */
-	protected function validator(array $data)
-	{
-		return Validator::make($data, [
-			#'login' => 'required|max:255|unique:users',
-			'email' => 'required|email|max:255|unique:users_activation|unique:users',
-			#'password' => 'required|min:6',
-		]);
-	}
-
-    /**
      * Get a validator for an incoming editing account request.
      *
      * @param  array  $data
