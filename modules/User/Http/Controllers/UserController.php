@@ -143,7 +143,7 @@ class UserController extends Controller {
 		 */
 		$data['token'] = str_random(32);
 		$data['created_at'] = time();
-		$url = url('/').'/user/activation/'.$data['token'];
+		$url = url('/').'/registration/'.$data['token'];
 		$data['email'] = $request->email;
 		/**
 		 * Отправка письма.

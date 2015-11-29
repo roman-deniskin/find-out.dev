@@ -33,7 +33,7 @@ class RegStep2Test extends TestCase
             ->where('email', '=', $email)
             ->value('token');
 
-        $this->visit('/user/activation/'.$token)
+        $this->visit('/registration/'.$token)
             ->see('Для продолжения регистрации заполните пожалуйста все поля')
             ->type($login, 'login')
             ->type($password, 'password')
