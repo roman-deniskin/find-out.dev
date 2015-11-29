@@ -13,6 +13,12 @@
                 <span class="white-text">
                 {{ trans('user::messages.ERROR_IN_REG2') }}
 
+                    @foreach($errors->get('email') as $arr)
+                        <li>{{ trans('user::messages.'.$arr, [
+                'att' => trans('user::names.email'),
+                ]) }}</li>
+                    @endforeach
+
                     @foreach($errors->get('login') as $arr)
                         <li>{{ trans('user::messages.'.$arr, [
                 'att' => trans('user::names.login'),
