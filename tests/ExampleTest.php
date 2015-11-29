@@ -11,8 +11,32 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicExample()
+    /**
+     * Обычная регистрация
+     */
+    /*public function testRegistration()
     {
-        #$this->visit('/')->see('Laravel 5');
+        $email = str_random(6).'@test.ru';
+        $this->visit('/')
+            ->type($email, 'email')
+            ->press('Регистрация')
+            ->see('Вы успешно зарегистрировались!');
+        $this->seeInDatabase('users_activation', [
+            'email' => $email
+        ]);
+    }*/
+
+    public function testRegistrationLogin()
+    {
+        $response = $this->call('GET', 'user/profile');
+        $login = str_random(8).'';
+        $this->visit('/')
+            ->type($login, 'text')
+            ->press('Регистрация')
+            ->see('Вы успешно зарегистрировались!');
+        $this->seeInDatabase('users', [
+            'login' => $login
+        ]);
+
     }
 }

@@ -50,6 +50,7 @@ img.leftAvatarImg {
     position: relative;
     background: #464646;
     padding: 0;
+    top: -5px;
 }
 .profileSwitch {
     margin-bottom: 10px;
