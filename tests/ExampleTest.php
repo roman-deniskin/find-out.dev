@@ -6,14 +6,24 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic functional test example.
-     *
-     * @return void
-     */
-    public function testBasicExample()
-    {
+
+    public function testBasicExample(){
         $this->visit('/')
-             ->see('Laravel 5');
+            ->assertResponseOk();
     }
+
+/*
+    public function testRegistrationLogin()
+    {
+        $response = $this->call('GET', 'user/profile');
+        $login = str_random(8).'';
+        $this->visit('/')
+            ->type($login, 'login')
+            ->press('Регистрация')
+            ->see('Вы успешно зарегистрировались!');
+        $this->seeInDatabase('users', [
+            'login' => $login
+        ]);
+    }
+*/
 }

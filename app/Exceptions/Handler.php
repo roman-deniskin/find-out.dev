@@ -21,6 +21,25 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * Функция для отображения сообщений на страницах ошибок (404, 500 etc.)
+     * @param HttpException $e
+     * @return \Illuminate\Http\Response
+     */
+    protected function renderHttpException(HttpException $e) {
+        $status = $e->getStatusCode();
+
+        if (view()->exists("errors.{$status}")) {
+            return response()->view("errors.{$status}", [
+                'message' => $e->getMessage(),
+                'status' => $status,
+                'headers' => $e->getHeaders(),
+            ], $status);
+        } else {
+            return $status;
+        }
+    }
+
+    /**
      * Report or log an exception.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
