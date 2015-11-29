@@ -8,6 +8,10 @@
     'gender' => 'Пол',
     'gender.men' => 'Мужчина',
     'gender.women' => 'Женщина',
+
+    'old_password' => 'Старый пароль',
+    'new_password' => 'Новый пароль',
+    'new_password_2' => 'Еще раз новый пароль',
     #buttons/links
     'registration' => 'Регистрация',
     'register' => 'Зарегистрироваться',
