@@ -57,7 +57,7 @@ class UserController extends Controller {
                 'account' => $account,
             ]);
         }else{
-            //TODO Сделать красивый вывод ошибки
+            //TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             throw new NotFoundHttpException('User with this token not found');
         }
 
@@ -151,12 +151,12 @@ class UserController extends Controller {
 	{
 		$data['token'] = str_random(32);
 		$data['created_at'] = time();
-        $url = url('/').'/user/activation/'.$data['token'];
+                $url = url('/').'/activation/'.$data['token'];
 
-        Mail::send('user::mails/welcome', ['url' => $url], function($message) use ($data)
-        {
-            $message->to($data['email'])->subject(trans('user::messages.ACCOUNT_CONFIRMATION'));
-        });
+                Mail::send('user::mails/welcome', ['url' => $url], function($message) use ($data)
+                {
+                    $message->to($data['email'])->subject(trans('user::messages.ACCOUNT_CONFIRMATION'));
+                });
 
 		return UsersActivation::create($data);
 	}

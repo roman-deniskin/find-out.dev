@@ -28,7 +28,7 @@
               </div>
               <div class="leftMenu">
                   <ul id="nav1">
-                      <a class="leftMenuLink" href="#1"><li class="leftMenuLi active"><div class="iconWraper"><i class="fa fa-user"></i></div>Профиль</li></a>
+                    <a class="leftMenuLink" href="#1"><li class="leftMenuLi active"><div class="iconWraper"><i class="fa fa-user"></i></div>Профиль</li></a>
                     <a class="leftMenuLink" href="#2"><li class="leftMenuLi"><div class="iconWraper"><i class="fa fa-users"></i></div>Друзья</li></a>
                     <a class="leftMenuLink" href="#3"><li class="leftMenuLi"><div class="iconWraper"><i class="fa fa-camera-retro"></i></div>Фотографии</li></a>
                     <a class="leftMenuLink" href="#4"><li class="leftMenuLi"><div class="iconWraper"><i class="fa fa-envelope"></i><div class="leftMenuCounter">9+</div></div>Сообщения</li></a>
