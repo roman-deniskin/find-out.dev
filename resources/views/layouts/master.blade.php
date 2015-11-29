@@ -56,6 +56,7 @@
             {{ Session::get('message') }}
         </div>
     </div>
+    <?php Session::forget('message') ?>
 @endif
 
 @yield('content')

@@ -11,8 +11,24 @@
         @if ($errors->has())
             <div class="alert alert-danger">
                 <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                    @foreach ($errors->get('email') as $error)
+                        <li>{{ trans('user::settings.valid.email.'.$error) }}</li>
+                    @endforeach
+
+                    @foreach ($errors->get('login') as $error)
+                        <li>{{ trans('user::settings.valid.login.'.$error) }}</li>
+                    @endforeach
+
+                    @foreach ($errors->get('old_password') as $error)
+                        <li>{{ trans('user::settings.valid.old_password.'.$error) }}</li>
+                    @endforeach
+
+                    @foreach ($errors->get('new_password') as $error)
+                        <li>{{ trans('user::settings.valid.new_password.'.$error) }}</li>
+                    @endforeach
+
+                    @foreach ($errors->get('new_password2') as $error)
+                        <li>{{ trans('user::settings.valid.new_password2.'.$error) }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -20,23 +36,34 @@
 
         @include('user::settings.tabs', ['active' => 'index'])
 
-        <form role="form" method="post" action="{{ url('user/profile/update') }}">
+        <form role="form" method="post" action="{{ url('/settings') }}">
             {!! csrf_field() !!}
 
             <label for="login">{{ trans('user::names.login') }}</label>
-            <input type="text" class="form-control" id="name" placeholder="{{ trans('user::names.login') }}" name="login" value="{{ $user->login }}">
+            <input type="text" class="form-control" id="login" placeholder="{{ trans('user::names.login') }}"
+                   name="login"
+                   value="{{ !empty(old($user->login)) ? old($user->login) : $user->login }}">
+            <br>
+
+            <label for="email">{{ trans('user::names.email') }}</label>
+            <input type="text" class="form-control" id="email" placeholder="{{ trans('user::names.email') }}"
+                   name="email"
+                   value="{{ !empty(old($user->email)) ? old($user->email) : $user->email }}">
             <br>
 
             <label for="old_password">{{ trans('user::names.old_password') }}</label>
-            <input type="password" class="form-control" id="old_password" placeholder="{{ trans('user::names.old_password') }}" name="old_password">
+            <input type="password" class="form-control" id="old_password"
+                   placeholder="{{ trans('user::names.old_password') }}" name="old_password">
             <br>
 
             <label for="new_password">{{ trans('user::names.new_password') }}</label>
-            <input type="password" class="form-control" id="new_password" placeholder="{{ trans('user::names.new_password') }}" name="new_password">
+            <input type="password" class="form-control" id="new_password"
+                   placeholder="{{ trans('user::names.new_password') }}" name="new_password">
             <br>
 
             <label for="new_password_2">{{ trans('user::names.new_password_2') }}</label>
-            <input type="password" class="form-control" id="new_password_2" placeholder="{{ trans('user::names.new_password_2') }}" name="new_password_2">
+            <input type="password" class="form-control" id="new_password_2"
+                   placeholder="{{ trans('user::names.new_password_2') }}" name="new_password_2">
             <br>
 
             <br>

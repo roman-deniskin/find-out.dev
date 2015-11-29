@@ -4,10 +4,10 @@ Route::group(['namespace' => 'Modules\User\Http\Controllers'], function() {
 	Route::get('/registration/{token}', 'UserController@activation');
 	Route::get('/user{id}', 'UserController@profile');
 	// Settings
-	Route::get('/settings', 'SettingController@index');
-	Route::get('/settings/data', 'SettingController@data');
-	Route::get('/settings/contacts', 'SettingController@contacts');
-	Route::get('/settings/privacy', 'SettingController@privacy');
+	Route::any('/settings', 'SettingController@index');
+	Route::any('/settings/data', 'SettingController@data');
+	Route::any('/settings/contacts', 'SettingController@contacts');
+	Route::any('/settings/privacy', 'SettingController@privacy');
 });
 
 Route::group(['prefix' => 'user', 'namespace' => 'Modules\User\Http\Controllers'], function()
