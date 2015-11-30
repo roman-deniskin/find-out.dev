@@ -180,7 +180,7 @@ class UserController extends Controller {
 			'name' => 'max:255|min:1',
 			'surname' => 'max:255|min:1',
 			'gender' => 'in:0,1',
-			'login' => 'required|max:255|min:2|unique:users',
+			'login' => 'required|max:64|min:2|unique:users',
 			'password' => 'required|min:6|max:100',
 		]);
 		if ($validator->fails()) {
