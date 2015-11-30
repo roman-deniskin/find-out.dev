@@ -9,6 +9,27 @@
     'gender.men' => 'Мужчина',
     'gender.women' => 'Женщина',
 
+    'social_networks' => 'Социальные сети',
+
+    'date_of_birth' => 'Дата рождения',
+    'date_of_birth_view_type' => 'Как отображать д.р',
+    'date_of_birth_mask' => '(В формате дд.мм.гггг)',
+
+    'country' => 'Страна',
+    'city' => 'Город',
+    'hobby' => 'Увлечения',
+    'activity' => 'Деятельность',
+    'social_network_vk' => 'Профиль ВКонтакте',
+    'social_network_fb' => 'Профиль Facebook',
+    'social_network_tw' => 'Страница в Twitter',
+    'social_network_in' => 'Страница в Instagram',
+    'social_network_skype' => 'Skype',
+    'social_homepage' => 'Сайт',
+    'relationship' => 'Семейное положение',
+    'location' => 'Место жительства',
+    'anonymous_nick' => 'Анонимный псевдоним',
+    'status' => 'Статус',
+
     'old_password' => 'Старый пароль',
     'new_password' => 'Новый пароль',
     'new_password_2' => 'Еще раз новый пароль',
