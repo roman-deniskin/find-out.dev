@@ -108,15 +108,13 @@ img.leftAvatarImg {
 }
 .leftMenuCounter {
     display: inline-block;
-    position: absolute;
     background: #5fb2ff;
     border-radius: 50px;
     font-size: 11px;
-    height: 15px;
-    width: 15px;
+    height: 17px;
+    width: 17px;
     text-align: center;
-    left: 7px;
-    bottom: -3px;
+    float: right;
 }
 .search {
     width: 300px; /* Ширина поля с кнопкой */
