@@ -176,8 +176,7 @@
                             <div class="datatime">12 ноября 2015 15:06</div>
                             <div class="wallPostContent">
                                 <div class="userPageRightInfColWallPostTill"></div>
-                                <p class="wallPostText">Предлагаю запретить слова. Есть информация, что с помощью них
-                                    общаются террористы. (C) Дуров П.</p>
+                                <p class="wallPostText">Предлагаю запретить слова. Есть информация, что с помощью них общаются террористы. (C) Дуров П.</p>
                             </div>
                         </div>
                     </div>
