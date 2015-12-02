@@ -96,19 +96,17 @@
                             <a class="leftMenuLink" href="#4">
                                 <li class="leftMenuLi">
                                     <div class="iconWraper"><i class="fa fa-envelope"></i>
-
-                                        <div class="leftMenuCounter">9+</div>
                                     </div>
                                     Сообщения
+                                    <div class="leftMenuCounter">9+</div>
                                 </li>
                             </a>
                             <a class="leftMenuLink" href="#5">
                                 <li class="leftMenuLi">
                                     <div class="iconWraper"><i class="fa fa-commenting-o"></i>
-
-                                        <div class="leftMenuCounter">5</div>
                                     </div>
                                     Вопросы
+                                    <div class="leftMenuCounter">5</div>
                                 </li>
                             </a>
                             <a class="leftMenuLink" href="#6">
@@ -157,6 +155,7 @@
                             <a class="userStatusText" href="#">{{ $account->status }}</a>
                         </div>
                         <div class="submitPostWrapper">
+                            <p class="submitPostText">Добавить запись на стену</p>
                             <textarea class="submitPostTextarea"></textarea>
                             <button class="submitPostButton">Отправить</button>
                             <div class="iconesWrapper">
