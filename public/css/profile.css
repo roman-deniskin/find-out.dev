@@ -62,39 +62,11 @@ img.avatarImg {
     min-height: 50px;
     width: 100%;
 }
-.profileInfo {
+.submitPostWrapper {
     display: inline-block;
     position: relative;
-    float: left;
     width: 100%;
-    margin: 0 15px;
-}
-.profileInfoLeftCol {
-    position: relative;
-    display: inline-block;
-    width: 30%;
-}
-.profileInfoRightCol {
-    display: inline-block;
-    position: relative;
-    width: 70%;
-}
-.showInfo {
-    width: 78%;
-    position: absolute;
-    display: inline-block;
-    text-align: center;
-    height: 29px;
-    padding-top: 5px;
-    bottom: 0;
-    right: 0;
-    color: #a1a1a1;
-    font-size: 13px;
-}
-.showInfo:hover {
-    background: #a1a1a1;
-    color: #FFF;
-    cursor: pointer;
+    margin-left: 15px;
 }
 .subAvatarMenuWraper {
     margin-top: 10px;
@@ -138,7 +110,8 @@ button.submitPostButton {
     float: right;
 }
 .wallIcones {
-    height: 20px;
+    font-size: 25px !important;
+    margin: 0 4px;
 }
 .leftColImgWrapper {
     display: inline-block;

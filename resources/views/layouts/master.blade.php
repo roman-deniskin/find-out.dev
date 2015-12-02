@@ -24,7 +24,7 @@
     <![endif]-->
     @yield('head')
   </head>
-  <body>
+  <body @yield('background')>
     <header class="header">
       <div class="container">
       	<div class="col-md-12">
