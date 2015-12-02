@@ -21,6 +21,9 @@ ul {
     margin-left: 0; /* Отступ слева в браузере IE и Opera */
     padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
 }
+.contentContainer {
+    background: #FFF;
+}
 li.leftMenuLi {
     height: 36px;
     color: #FFF;
@@ -40,14 +43,14 @@ li.leftMenuLi:hover{
 img.leftAvatarImg {
     position: relative;
     display: inline-block;
-    max-height: 140px;
+    max-height: 90px;
     max-width: 100%;
     margin-top: 10px;
     border-radius: 999px;
 }
 .leftCol {
     height: 100%;
-    position: relative;
+    position: absolute;
     background: #464646;
     padding: 0;
     top: -5px;
