@@ -7,6 +7,7 @@ class CreateTableUsersActivation extends Migration {
 
     public function up()
     {
+        //Таблица неактивированных пользователей
         Schema::create('users_activation', function (Blueprint $table) {
             $table->increments('id');
             $table->string('email')->unique()->index();
