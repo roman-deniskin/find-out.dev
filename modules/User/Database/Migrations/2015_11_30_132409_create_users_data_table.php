@@ -13,9 +13,9 @@ class CreateUsersDataTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
 
-            $table->string('first_name')->nullable(); # Имя
-            $table->string('last_name')->nullable(); # Фамилия
-            $table->enum('gender', [0,1])->default(1); // 0 women / 1 men
+            $table->string('first_name')->nullable()->index();; # Имя
+            $table->string('last_name')->nullable()->index();; # Фамилия
+            $table->enum('gender', [0,1])->default(1)->index();; // 0 women / 1 men
 
             $table->string('status')->nullable(); # Статус
             $table->string('hobby')->nullable(); # Увлечения / Интересы
@@ -34,7 +34,7 @@ class CreateUsersDataTable extends Migration
             $table->string('city')->nullable(); # Город
             $table->string('country')->nullable(); # Страна
 
-            $table->string('date_of_birth', strlen('dd.mm.yyyy'))->nullable(); # дата рождения
+            $table->string('date_of_birth', strlen('dd.mm.yyyy'))->nullable()->index();; # дата рождения
             $table->string('anonymous_nick')->nullable(); #Псевдоним
 
             $table->integer('updated_at');

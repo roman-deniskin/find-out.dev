@@ -1,6 +1,8 @@
 <?php namespace Modules\User\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
+use Modules\User\Entities\UserData;
+use Modules\User\Entities\UserSetting;
 use Pingpong\Modules\Routing\Controller;
 use Modules\User\Entities\User;
 use Validator;
@@ -19,13 +21,16 @@ class SettingController extends Controller
     public function index(Request $request)
     {
 
+        $user = User::find(Auth::user()->id);
+        $userData = UserData::findOne($user->id);
+
         if ($request->isMethod('post'))
         {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'email' => 'email|max:100|unique:users_activation|unique:users,email,'.Auth::user()->id,
-                'login' => 'max:64|min:2|unique:users,login,'.Auth::user()->id,
-                'anonymous_nick' => 'max:64|min:2|unique:users,login,'.Auth::user()->id.'|unique:users,anonymous_nick,'.Auth::user()->id,
+                'email' => 'email|max:100|unique:users_activation|unique:users,email,'.$user->id,
+                'login' => 'max:64|min:2|unique:users,login,'.$user->id,
+                'anonymous_nick' => 'max:64|min:2|unique:users,login,'.$user->id.'|unique:users_data,anonymous_nick,user_id'.$user->id,
                 'old_password' => 'min:6|max:100|required_with:new_password,new_password2',
                 'new_password' => 'min:6|max:100|required_with:old_password',
                 'new_password2' => 'min:6|max:100|required_with:new_password,old_password',
@@ -37,27 +42,40 @@ class SettingController extends Controller
                 );
             }
 
-            $user = Auth::user();
             $user->login = $data['login'];
             $user->email = $data['email'];
-            $user->anonymous_nick = $data['anonymous_nick'];
 
             if(isset($request->new_password) && !empty($request->new_password))
             $user->password = bcrypt($data['new_password']);
 
             $user->save();
 
+            $userData->anonymous_nick = $data['anonymous_nick'];
+            $userData->save();
+
             $request->session()->flash('message', trans('user::settings.saved'));
         }
 
         return view('user::settings/index', [
-            'user' => Auth::user(),
+            'user' => $user,
         ]);
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
+     * @var $user User
+     * @var $userData UserData
+     * @var $userSetting UserSetting
+     */
     public function data(Request $request)
     {
+        $user = User::find(Auth::user()->id);
+        $userData = UserData::findOne($user->id);
+        $userSetting = UserSetting::findOne($user->id);
+
         if ($request->isMethod('post'))
         {
             $messages = [
@@ -71,8 +89,8 @@ class SettingController extends Controller
 
             $data = $request->all();
             $validator = Validator::make($data, [
-                'name' => 'max:100',
-                'surname' => 'max:100',
+                'first_name' => 'max:100',
+                'last_name' => 'max:100',
                 'status' => 'max:255',
 
                 'country' => 'max:255',
@@ -91,7 +109,7 @@ class SettingController extends Controller
                 'social_homepage' => 'max:255',
 
                 'gender' => 'in:0,1',
-                'relationship' => 'between:0,'.count(User::getRelationship(Auth::user()->gender)),
+                'relationship' => 'between:0,'.count($user->getRelationship()),
             ], $messages);
 
             if ($validator->fails()) {
@@ -99,37 +117,39 @@ class SettingController extends Controller
                     $request, $validator
                 );
             }
+            
+            $userData->first_name = $data['first_name'];
+            $userData->last_name = $data['last_name'];
+            $userData->status = $data['status'];
 
-            $user = Auth::user();
-            $user->name = $data['name'];
-            $user->surname = $data['surname'];
-            $user->status = $data['status'];
+            $userData->country = $data['country'];
+            $userData->city = $data['city'];
+            $userData->hobby = $data['hobby'];
+            $userData->activity = $data['activity'];
+            $userData->location = $data['location'];
+            $userData->date_of_birth = $data['date_of_birth'];
 
-            $user->country = $data['country'];
-            $user->city = $data['city'];
-            $user->hobby = $data['hobby'];
-            $user->activity = $data['activity'];
-            $user->location = $data['location'];
-            $user->date_of_birth = $data['date_of_birth'];
-            $user->date_of_birth_view_type = $data['date_of_birth_view_type'];
+            $userData->social_network_vk = $data['social_network_vk'];
+            $userData->social_network_fb = $data['social_network_fb'];
+            $userData->social_network_tw = $data['social_network_tw'];
+            $userData->social_network_in = $data['social_network_in'];
+            $userData->social_network_skype = $data['social_network_skype'];
+            $userData->social_homepage = $data['social_homepage'];
 
-            $user->social_network_vk = $data['social_network_vk'];
-            $user->social_network_fb = $data['social_network_fb'];
-            $user->social_network_tw = $data['social_network_tw'];
-            $user->social_network_in = $data['social_network_in'];
-            $user->social_network_skype = $data['social_network_skype'];
-            $user->social_homepage = $data['social_homepage'];
+            $userData->gender = $data['gender'];
+            $userData->relationship = $data['relationship'];
 
-            $user->gender = $data['gender'];
-            $user->relationship = $data['relationship'];
+            $userData->save();
 
-            $user->save();
+            $userSetting->date_of_birth_view_type = $data['date_of_birth_view_type'];
+            $userSetting->save();
 
             $request->session()->flash('message', trans('user::settings.saved'));
         }
 
         return view('user::settings/data', [
-            'user' => Auth::user(),
+            'user' => $user,
+            'userData' => $userData,
         ]);
     }
 
