@@ -39,15 +39,27 @@ class RegStep2Test extends TestCase
             ->type($password, 'password')
             ->type($name, 'name')
             ->type($surname, 'surname')
-            ->type($anonymNick, 'anonymNick')
+            ->type($anonymNick, 'anonymous_nick')
             ->press('Регистрация')
             ->see('Выход');
 
         $this->seeInDatabase('users', [
             'email' => $email,
             'login' => $login,
-            'name' => $name,
-            'surname' => $surname,
+        ]);
+
+        $uid = DB::table('users')
+            ->where('email', '=', $email)
+            ->value('id');
+
+        $this->seeInDatabase('users_data', [
+            'user_id' => $uid,
+            'first_name' => $name,
+            'last_name' => $surname,
+        ]);
+
+        $this->seeInDatabase('users_setting', [
+            'user_id' => $uid,
         ]);
 
     }

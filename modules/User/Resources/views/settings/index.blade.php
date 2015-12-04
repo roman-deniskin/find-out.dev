@@ -48,7 +48,7 @@
             <label for="anonymous_nick">{{ trans('user::names.anonymous_nick') }}</label>
             <input type="text" class="form-control" id="anonymous_nick" placeholder="{{ trans('user::names.anonymous_nick') }}"
                    name="anonymous_nick"
-                   value="{{ !empty(old($user->anonymous_nick)) ? old($user->anonymous_nick) : $user->anonymous_nick }}">
+                   value="{{ !empty(old($user->data->anonymous_nick)) ? old($user->data->anonymous_nick) : $user->data->anonymous_nick }}">
             <br>
 
             <label for="email">{{ trans('user::names.email') }}</label>

@@ -1,8 +1,9 @@
 @extends('layouts.master')
 
-@section('title') Профиль {{ $account->login }} @endsection
-@section('description') Find-Out meta-description @endsection
-@section('keywords') Find-Out meta-keywords @endsection
+@section('title', 'Профиль '.$account->data->first_name)
+
+@section('description', 'Find-Out meta-description')
+@section('keywords', 'Find-Out meta-keywords')
 
 @section('head')
     <link href="{{ asset("css/profile.css") }}" rel="stylesheet">
@@ -152,7 +153,7 @@
                         <div class="nameWraper"><h1 class="userNameText">{{ $account->getFullName() }}</h1></div>
                         <div class="userStatusWraper">
                             <div class="userPageRightInfColStatusTill"></div>
-                            <a class="userStatusText" href="#">{{ $account->status }}</a>
+                            <a class="userStatusText" href="#">{{ $data->status }}</a>
                         </div>
                         <div class="submitPostWrapper">
                             <p class="submitPostText">Добавить запись на стену</p>

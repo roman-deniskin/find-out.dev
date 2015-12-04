@@ -18,11 +18,8 @@ class CreateUsersTable extends Migration {
             $table->string('email')->unique()->index();
             $table->string('password', 60);
 
-            $table->string('name');
-            $table->string('surname');
-
-            $table->boolean('active')->default(0);
-            $table->boolean('gender')->default(1); // 1 Men / 0 Women
+            //Когда 0 значит юзер заблокирован (на будующее)
+            $table->boolean('active')->default(1);
 
             $table->rememberToken();
             $table->integer('updated_at');

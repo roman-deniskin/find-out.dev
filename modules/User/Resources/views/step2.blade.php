@@ -88,7 +88,7 @@
             <div class="form-group settingsBlock col-md-12">
               <label class="col-md-2 col-md-offset-3 control-label">Псевдоним:</label>
               <div class="col-md-3 inputWraper">
-                <input type="text" autocomplete="off" placeholder="Псевдоним" class="inputRegisterField" value="" name="anonymNick" required="true">
+                <input type="text" autocomplete="off" placeholder="Псевдоним" class="inputRegisterField" value="" name="anonymous_nick" required="true">
               </div>
               <div class="col-md-3 hintWarper">
                 <div class="col-md-4 hint">

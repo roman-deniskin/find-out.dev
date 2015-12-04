@@ -21,6 +21,8 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $table = 'users';
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -30,19 +32,31 @@ class User extends Model implements AuthenticatableContract,
         'login',
         'email',
         'password',
-        'name',
-        'surname',
-        'gender',
     ];
 
     /**
-     * @return string
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
      */
+    protected $hidden = ['password', 'remember_token'];
+
+    public function data()
+    {
+        return $this->hasOne('Modules\User\Entities\UserData', 'user_id', 'id');
+    }
+
+    public function setting()
+    {
+        return $this->hasOne('Modules\User\Entities\UserSetting', 'user_id', 'id');
+    }
+
+
     public function getGender(){
         $array = [];
         $array[0] = trans('user::names.gender.women');
         $array[1] = trans('user::names.gender.men');
-        return $array[$this->gender];
+        return $array[$this->data->gender];
     }
 
     /**
@@ -50,20 +64,20 @@ class User extends Model implements AuthenticatableContract,
      */
     public function getBirthDate(){
         $array = [];
-        $array[] = $this->date_of_birth;
+        $array[] = $this->data->date_of_birth;
         $array[] = null;
-        $array[] = substr($this->date_of_birth,0,5);
-        $array[] = substr($this->date_of_birth,3);
-        $array[] = substr($this->date_of_birth,6);
+        $array[] = substr($this->data->date_of_birth,0,5);
+        $array[] = substr($this->data->date_of_birth,3);
+        $array[] = substr($this->data->date_of_birth,6);
 
-        return $array[$this->date_of_birth_view_type];
+        return $array[$this->setting->date_of_birth_view_type];
     }
 
     /**
      * @return string
      */
     public function getFullName(){
-        return sprintf('%s %s', $this->name, $this->surname);
+        return sprintf('%s %s', $this->data->first_name, $this->data->last_name);
     }
 
     /**
@@ -85,13 +99,13 @@ class User extends Model implements AuthenticatableContract,
     public function getUserRelationship()
     {
         $array = [];
-        $array[] = trans('user::relationship.'.$this->gender.'.single');
-        $array[] = trans('user::relationship.'.$this->gender.'.in_a_relationship');
-        $array[] = trans('user::relationship.'.$this->gender.'.engaged');
-        $array[] = trans('user::relationship.'.$this->gender.'.married');
-        $array[] = trans('user::relationship.'.$this->gender.'.in_love');
-        $array[] = trans('user::relationship.'.$this->gender.'.its_complicated');
-        $array[] = trans('user::relationship.'.$this->gender.'.actively_searching');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.single');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.in_a_relationship');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.engaged');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.married');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.in_love');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.its_complicated');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.actively_searching');
 
         return $array[$this->relationship];
     }
@@ -100,24 +114,19 @@ class User extends Model implements AuthenticatableContract,
      * @param int $gender
      * @return array
      */
-    public static function getRelationship($gender = 1)
+    public function getRelationship()
     {
         $array = [];
-        $array[] = trans('user::relationship.'.$gender.'.single');
-        $array[] = trans('user::relationship.'.$gender.'.in_a_relationship');
-        $array[] = trans('user::relationship.'.$gender.'.engaged');
-        $array[] = trans('user::relationship.'.$gender.'.married');
-        $array[] = trans('user::relationship.'.$gender.'.in_love');
-        $array[] = trans('user::relationship.'.$gender.'.its_complicated');
-        $array[] = trans('user::relationship.'.$gender.'.actively_searching');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.single');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.in_a_relationship');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.engaged');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.married');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.in_love');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.its_complicated');
+        $array[] = trans('user::relationship.'.$this->data->gender.'.actively_searching');
 
         return $array;
     }
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = ['password', 'remember_token'];
+
 }

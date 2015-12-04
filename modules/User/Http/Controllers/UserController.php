@@ -1,5 +1,7 @@
 <?php namespace Modules\User\Http\Controllers;
 
+use Modules\User\Entities\UserData;
+use Modules\User\Entities\UserSetting;
 use Pingpong\Modules\Routing\Controller;
 use Modules\User\Entities\UsersActivation;
 use Modules\User\Entities\User;
@@ -48,56 +50,17 @@ class UserController extends Controller {
 	 */
 	public function profile($id){
 		$account = User::find($id);
+		$data = $account->data;
 		if($account){
 			return view('user::profile', [
 				'account' => $account,
+				'data' => $data,
 			]);
 		}else{
 			throw new NotFoundHttpException(trans('user::messages.user.not_found'));
 		}
 	}
-	/**
-	 * Сохранение данных авторизованного пользователя
-	 * @param Request $request
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
-	public function postUpdate(Request $request){
-		$account = Auth::user();
-		if($account){
-			$validator = Validator::make($request->all(), [
-				'name' => 'max:255',
-				'surname' => 'max:255',
-				'gender' => 'in:0,1',
-			]);
-			if ($validator->fails()) {
-				$this->throwValidationException(
-					$request, $validator
-				);
-			}
-			$user = Auth::user();
-			$user->name = $request->name;
-			$user->surname = $request->surname;
-			$user->gender = $request->gender;
-			$user->save();
-			return redirect(url('/user/profile/edit'))->with('message', trans('user::messages.data.saved'));
-		}else{
-			return redirect(url('/'))->with('message', trans('user::messages.tokenNotFound'));
-		}
-	}
-	/**
-	 * Страница изменения данных аккаунта
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-	 */
-	public function update(){
-		$account = Auth::user();
-		if($account){
-			return view('user::edit', [
-				'account' => $account,
-			]);
-		}else{
-			return redirect(url('/'))->with('message', trans('user::messages.tokenNotFound'));
-		}
-	}
+
 	/**
 	 * Выводим страницу активации (второго шага регистрации)
 	 * На ней пользователь заполняет все свои данные
@@ -131,7 +94,7 @@ class UserController extends Controller {
 	{
 		$validator = Validator::make($request->all(), [
 			'email' => 'required|email|max:255|unique:users_activation|unique:users',
-		]);;
+		]);
 		if ($validator->fails()) {
 			$this->throwValidationException(
 				$request, $validator
@@ -169,7 +132,6 @@ class UserController extends Controller {
 	}
 	/**
 	 * Регистрация пользователя
-	 * Создание неактивной учетски в таблице users_activation
 	 * @param Request $request
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
@@ -181,6 +143,7 @@ class UserController extends Controller {
 			'surname' => 'max:255|min:1',
 			'gender' => 'in:0,1',
 			'login' => 'required|max:64|min:2|unique:users',
+			'anonymous_nick' => 'required|max:64|min:2|unique:users_data',
 			'password' => 'required|min:6|max:100',
 		]);
 		if ($validator->fails()) {
@@ -189,19 +152,37 @@ class UserController extends Controller {
 			);
 		}
 		$data = $request->all();
+		//Создаем пользователя
 		$user = User::create([
 			'login' => $data['login'],
-			'name' => $data['name'],
-			'surname' => $data['surname'],
 			'email' => $data['email'],
 			'password' => bcrypt($data['password']),
 		]);
 		if($user) {
+
 			//Сразу Авторизовываем его
 			Auth::login($user);
+
 			//Удаляем неактивированный аккаунт
 			$account = UsersActivation::where('email', $request->email)->first();
 			$account->delete();
+
+			//Сохраняем информацию о нём
+			UserData::create([
+				'user_id' => Auth::user()->id,
+				'anonymous_nick' => $data['anonymous_nick'],
+				'first_name' => $data['name'],
+				'last_name' => $data['surname'],
+				'gender' => $data['gender'],
+			]);
+
+			//Создаем запись в таблице настроек и записываем первые значения
+			UserSetting::create([
+				'user_id' => Auth::user()->id,
+				'date_of_birth_view_type' => 0,
+				'lang' => 'ru',
+			]);
+
 			return redirect($this->redirectPath());
 		}else{
 			return redirect($this->redirectPath())->with([

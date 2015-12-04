@@ -8,19 +8,5 @@ class UsersActivation extends Model
     public $timestamps = false;
     protected $fillable = ['email', 'token', 'created_at'];
 
-    /*
-    protected static function boot()
-    {
-        static::creating(function ($model) {
-            $model->token = str_random(32);
 
-            return $model->validate();
-        });
-    }
-
-    protected function validate()
-    {
-        return 1;
-    }
-*/
 }
