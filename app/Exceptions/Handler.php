@@ -3,68 +3,51 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that should not be reported.
+     * A list of the exception types that are not reported.
      *
      * @var array
      */
     protected $dontReport = [
-        HttpException::class,
-        ModelNotFoundException::class,
+        //
     ];
 
     /**
-     * Функция для отображения сообщений на страницах ошибок (404, 500 etc.)
-     * @param HttpException $e
-     * @return \Illuminate\Http\Response
+     * A list of the inputs that are never flashed for validation exceptions.
+     *
+     * @var array
      */
-    protected function renderHttpException(HttpException $e) {
-        $status = $e->getStatusCode();
-
-        if (view()->exists("errors.{$status}")) {
-            return response()->view("errors.{$status}", [
-                'message' => $e->getMessage(),
-                'status' => $status,
-                'headers' => $e->getHeaders(),
-            ], $status);
-        } else {
-            return $status;
-        }
-    }
+    protected $dontFlash = [
+        'password',
+        'password_confirmation',
+    ];
 
     /**
      * Report or log an exception.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $e
+     * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Exception $exception)
     {
-        return parent::report($e);
+        parent::report($exception);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
+     * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Exception $exception)
     {
-        if ($e instanceof ModelNotFoundException) {
-            $e = new NotFoundHttpException($e->getMessage(), $e);
-        }
-
-        return parent::render($request, $e);
+        return parent::render($request, $exception);
     }
 }
