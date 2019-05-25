@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+
+  nginx:
+    container_name: find-out_nginx
+    image: nginx:1.16.0
+    ports:
+      - 13002:80
+    links:
+      - php
+    volumes:
+      - ./src:/etc/nginx/sites-available/default
+      - ./src:/etc/nginx/sites-enabled/default
+
+      - ./nginx/config/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/config:/etc/nginx
+      - ./nginx/logs/nginx-access.log:/var/log/nginx/access.log
+      - ./nginx/logs/nginx-access.log:/var/log/nginx/error.log
+    depends_on:
+      - php
+      - mariadb
+    networks:
+      - find_out_network
+
+  php:
+    container_name: find-out_php73
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 9000:9000
+    volumes:
+      - ./src/project:/var/www/html
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - find_out_network
+
+  mariadb:
+    container_name: find-out_mariadb
+    image: mariadb:10.3
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_USER=user
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=pass
+      - MYSQL_DATABASE=db
+    command:
+      # https://github.com/docker-library/mariadb/issues/138
+      'mysqld --innodb-flush-method=fsync'
+    networks:
+      - find_out_network
+
+networks:
+  default:
+    external:
+      name: nginx-find-out
+  find_out_network:
+    driver: bridge
