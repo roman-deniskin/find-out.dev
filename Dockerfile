@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y \
         wget \
         libzip-dev \
         zip \
-        git \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
@@ -25,8 +24,5 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 RUN chown -R $USER:www-data /var/www/html/
 RUN chmod -R 775 /var/www/html/
-RUN apt-get update && apt-get install software-properties-common -y
-RUN
 RUN apt-get update && apt-get install -y \
-        apt install nodejs npm
-RUN npm --version
+        git
